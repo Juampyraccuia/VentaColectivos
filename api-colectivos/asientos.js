@@ -17,7 +17,7 @@ export const asientosRouter=express.Router()
             "SELECT id, numero, estado FROM asientos",
             {id}
         );
-        if (rows.lengt>0) {
+        if (rows.length>0) {
             res.send(rows[0])
         }else{
             res.status(404).send({mensaje:"asiento no encontrado"})
