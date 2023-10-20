@@ -1,9 +1,9 @@
 import express from "express";
 import cors from "cors";
-import { asientosRouter } from "./asientos";
-import { ventasRouter } from "./ventas";
-import { pasajeroRouter } from "./pasajero";
-import { vendedorRouter } from "./vendedor";
+import { asientosRouter } from "./asientos.js";
+import { ventasRouter } from "./ventas.js";
+import { pasajeroRouter } from "./pasajero.js";
+import { vendedorRouter } from "./vendedor.js";
 
 
 const app = express();
