@@ -4,14 +4,14 @@ import { db } from "./db.js";
 
 export const asientosRouter=express.Router()
 
-    .get("/", async(req,res)=>{
+    asientosRouter.get("/", async(req,res)=>{
         cosnt [rows,fields]=await db.execute(
             "SELECT id, numero, estado FROM asiento"
         );
         res.send(rows)
     })
 
-    .get("/:id", async(req,res)=>{
+    asientosRouter.get("/:id", async(req,res)=>{
         const id= req.params.id;
         const[rows, fields]=await db.execute(
             "SELECT id, numero, estado FROM asientos",
