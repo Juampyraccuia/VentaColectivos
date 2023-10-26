@@ -2,15 +2,14 @@ import express from "express";
 import { db } from "./db.js";
 
 
-export const pasajeroRouter = express.Router()
-
-  .get("/", async (req, res) => {
-    cosnt[rows, fields] = await db.execute(
-      "SELECT * FROM pasajeros"
-    );
-    res.send(rows)
-  })
-
+export const pasajeroRouter = express
+.Router()
+pasajeroRouter.get("/", async (req, res) => {
+  const [rows, fields] = await db.execute("SELECT * FROM ventacolectivos.pasajeros");
+  res.send(rows);
+})
+  
+  
   .get("/:id/pasajeros", async (req, res) => {
     const id = req.params.id;
     const [rows, fields] = await db.execute(

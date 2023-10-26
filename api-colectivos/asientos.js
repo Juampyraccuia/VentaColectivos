@@ -2,19 +2,18 @@ import express from "express";
 import { db } from "./db.js";
 
 
-export const asientosRouter=express.Router()
-
-    asientosRouter.get("/", async(req,res)=>{
-        cosnt [rows,fields]=await db.execute(
-            "SELECT id, numero, estado FROM asiento"
+export const asientosRouter=express
+.Router()
+    asientosRouter.get("/", async (req, res) => {
+        const [rows, fields] = await db.execute("SELECT * FROM ventacolectivos.asientos"
         );
-        res.send(rows)
-    })
-
+        res.send(rows);
+      })
+            
     asientosRouter.get("/:id", async(req,res)=>{
         const id= req.params.id;
         const[rows, fields]=await db.execute(
-            "SELECT id, numero, estado FROM asientos",
+            "SELECT * FROM ventascolectivos.asientos",
             {id}
         );
         if (rows.length>0) {

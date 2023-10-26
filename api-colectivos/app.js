@@ -4,7 +4,8 @@ import { asientosRouter } from "./asientos.js";
 import { ventasRouter } from "./ventas.js";
 import { pasajeroRouter } from "./pasajero.js";
 import { vendedorRouter } from "./vendedor.js";
-
+import { boletosRouter } from "./boletos.js";
+import { destinosRouter } from "./destinos.js";
 const app = express();
 
 app.use(express.json());
@@ -14,6 +15,8 @@ app.use("/asientos", asientosRouter);
 app.use("/ventas", ventasRouter);
 app.use("/pasajeros", pasajeroRouter);
 app.use("/vendedor", vendedorRouter);
+app.use("/boletos",boletosRouter);
+app.use("/destinos",destinosRouter)
 
 app.get("/", (req, res) => {
   res.send("Hola mundo");

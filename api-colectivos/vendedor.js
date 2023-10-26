@@ -4,12 +4,15 @@ import { db } from "./db.js";
 
 export const vendedorRouter = express.Router()
 
-  .get("/", async (req, res) => {
-    cosnt[rows, fields] = await db.execute(
-      "SELECT * FROM vendedor"
-    );
-    res.send(rows)
+  vendedorRouter.get("/", async (req, res) => {
+    const [rows, fields] = await db.execute("SELECT * FROM ventacolectivos.vendedor");
+    res.send(rows);
   })
+  // pasajeroRouter.get("/", async (req, res) => {
+  //   const [rows, fields] = await db.execute("SELECT * FROM ventacolectivos.pasajeros");
+  //   res.send(rows);
+  // })
+    
 
   .get("/:id/vendedor", async (req, res) => {
     const id = req.params.id;

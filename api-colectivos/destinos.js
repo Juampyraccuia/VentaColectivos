@@ -1,15 +1,17 @@
-import { express } from "express"
+import  express  from "express"
 import { db } from "./db.js"
 
 export const destinosRouter = express
-    .get("/", async (req, res) => {
-        const [rows, fields] = await db.execute(
-            "SELECT id, valor, destino FROM destino"
+.Router()
+    destinosRouter.get("/",async(req,res)=>{
+        const [rows, fields]=await db.execute(
+            "SELECT * FROM ventacolectivos.boletos"
         );
         res.send(rows)
-    })
+    });
+    
 
-    .get("./:id", async (req, res) => {
+    destinosRouter.get("./:id", async (req, res) => {
         const id = req.params.id;
         const [rows, fields] = await db.execute(
             "SELECT id, valor, destino FROM destino",

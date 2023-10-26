@@ -2,9 +2,10 @@ import express from "express";
 import { db } from "./db.js";
 
 export const boletosRouter=express
+.Router()
 boletosRouter.get("/",async(req,res)=>{
     const [rows, fields]=await db.execute(
-        "SELECT id, destino, colectivo FROM boletos"
+        "SELECT * FROM ventacolectivos.boletos"
     );
     res.send(rows)
 });
