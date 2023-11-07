@@ -11,7 +11,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.use("/asientos", asientosRouter); // Corregido
+app.use("/asientos", asientosRouter);
 app.use("/ventas", ventasRouter);
 app.use("/pasajeros", pasajeroRouter);
 app.use("/vendedor", vendedorRouter);

@@ -20,7 +20,7 @@ destinosRouter.get("/", async (req, res) => {
         }
     })
 
-    .post("/", async (req, res) => {
+    .post("/destinos", async (req, res) => {
         const destino = req.body;
         const [result] = await db.execute(
             "INSERT INTO destinos (valor, destino) VALUES (?, ?)",
