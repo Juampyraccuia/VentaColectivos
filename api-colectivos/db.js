@@ -1,5 +1,5 @@
+
 import mysql from "mysql2/promise";
-import "dotenv/config"
 // Conectar a base de datos
 export const db = await mysql.createConnection({
     host: process.env.DB_HOST,

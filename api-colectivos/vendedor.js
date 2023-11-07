@@ -1,28 +1,21 @@
 import express from "express";
 import { db } from "./db.js";
+export const vendedorRouter = express.Router();
 
-
-export const vendedorRouter = express.Router()
-
-  vendedorRouter.get("/", async (req, res) => {
-    const [rows, fields] = await db.execute("SELECT * FROM ventacolectivos.vendedor");
-    res.send(rows);
-  })
-  // pasajeroRouter.get("/", async (req, res) => {
-  //   const [rows, fields] = await db.execute("SELECT * FROM ventacolectivos.pasajeros");
-  //   res.send(rows);
-  // })
-    
-
-  .get("/:id/vendedor", async (req, res) => {
-    const id = req.params.id;
+vendedorRouter.get("/", async (req, res) => {
+  const [rows, fields] = await db.execute(
+    `SELECT vendedor.nombre, SUM(ventas.monto_total) AS total_ventas FROM vendedor 
+    JOIN ventas ON vendedor.idvendedor = ventas.vendedor_idVendedor GROUP BY vendedor.nombre`
+  );
+  res.send(rows);
+})
+  .get("/:nombre", async (req, res) => {
+    const nombre = req.params.nombre;
     const [rows, fields] = await db.execute(
-      "SELECT nombre, apellido, total, horario FROM vendedor WHERE id = :id",
-      { id }
+      `SELECT vendedor.idvendedor, ventas.idventa, SUM(ventas.monto_total) AS total_ventas FROM vendedor
+      JOIN ventas ON vendedor.idvendedor = ventas.vendedor_idVendedor WHERE vendedor.nombre = :nombre
+      GROUP BY vendedor.idvendedor, ventas.idventa`,
+      { nombre }
     );
-    if (rows.length > 0) {
-      res.send(rows[0]);
-    } else {
-      res.status(404).send({ mensaje: "Vendedor no encontrado" });
-    }
+    res.send(rows);
   });
