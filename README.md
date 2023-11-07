@@ -25,3 +25,8 @@ Para lanzar el proyecto, sigue estos pasos:
 
 Esto iniciará el servidor y podrás acceder al sistema de ventas en tu navegador.
 ¡Disfruta usando el Sistema de ventas para colectivos de larga distancia!
+
+## Authors
+
+- [@Juan Pablo Raccuia](https://github.com/Juampyraccuia)
+- [@Lucas Alvares](https://github.com/xXlucasXxLr01)
