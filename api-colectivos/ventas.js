@@ -7,9 +7,7 @@ ventasRouter.get("/", async (req, res) => {
     res.send(rows);
 })
     .get("/:id", async (req, res) => {
-
         const id = req.params.id;
-
         const [rows, fields] = await db.execute(
             "SELECT * FROM ventacolectivos.ventas WHERE idventa = :id",
             { id }

@@ -10,11 +10,11 @@ pasajeroRouter.get("/", async (req, res) => {
   res.send(rows);
 })
 
-  .get("/:id/pasajeros", async (req, res) => {
-    const id = req.params.id;
+  .get("/:dni", async (req, res) => {
+    const dni = req.params.dni;
     const [rows, fields] = await db.execute(
-      "SELECT id, nombres, apellidos, dni FROM pasajeros WHERE id = :id",
-      { id }
+      "SELECT  nombres, apellido, dni FROM pasajeros WHERE dni = :dni",
+      { dni }
     );
     if (rows.length > 0) {
       res.send(rows[0]);
@@ -23,12 +23,31 @@ pasajeroRouter.get("/", async (req, res) => {
     }
   })
 
-  .post("/pasajeros", async (req, res) => {
+  .post("/", async (req, res) => {
     const pasajero = req.body;
+    const nombres = pasajero.nombres || null;
+    const apellido = pasajero.apellido || null;
+    const dni = pasajero.dni || null;
+    const fechaNac = pasajero.fechaNac || null;
+
     const [rows] = await db.execute(
-      `INSERT INTO ventacolectivos.pasajeros (nombres, apellidos, dni, fechaNac)
-      VALUES(: nombres, : apellidos, : dni, : fechaNac)`,
-      { nombres: pasajero.nombres, apellidos: pasajero.apellidos, dni: pasajero.dni, fechaNac: pasajero.fechaNac }
+      `INSERT INTO ventacolectivos.pasajeros (nombres, apellido, dni, fechaNac)
+    VALUES (?, ?, ?, ?)`,
+      [nombres, apellido, dni, fechaNac]
     );
-    res.status(201).send({ nombres: pasajero.nombres, apellidos: pasajero.apellidos, id: rows.insertId });
-  });
+
+    res.status(201).send({ nombres, apellido, id: rows.insertId });
+  })
+
+  .delete("/:dni", async (req, res) => {
+    const dni = req.params.dni;
+    const [result] = await db.execute(
+      "DELETE FROM pasajeros WHERE dni = :dni",
+      { dni }
+    );
+    if (result.affectedRows > 0) {
+      res.status(204).send();
+    } else {
+      res.status(404).send({ mensaje: "Persona no encontrada" });
+    }
+  })
