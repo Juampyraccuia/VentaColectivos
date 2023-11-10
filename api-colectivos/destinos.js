@@ -1,5 +1,6 @@
 import express from "express";
 import { db } from "./db.js";
+import { body, param, query, validationResult } from "express-validator";
 
 export const destinosRouter = express.Router();
 
@@ -10,7 +11,7 @@ destinosRouter.get("/", async (req, res) => {
     .get("/:nombre", async (req, res) => {
         const nombre = req.params.nombre;
         const [rows, fields] = await db.execute(
-            "SELECT idDestinos, valor, destino FROM destinos WHERE destino = :nombre",
+            "SELECT * FROM destinos WHERE destino = :nombre",
             { nombre }
         );
         if (rows.length > 0) {
@@ -21,22 +22,26 @@ destinosRouter.get("/", async (req, res) => {
     })
 
 
-    .post("/", async (req, res) => {
-        const destino = req.body;
-        if (destino.valor === undefined || destino.destino === undefined) {
-            return res.status(400).send({ mensaje: "Los campos valor y destino son requeridos." });
+    .post("/", 
+    body("destino.valor").isNumeric().isLength({min:1, max:8}),
+    body("destino.destino").isAlpha().isLength({min:1, max:45}),
+    async(req,res)=>{
+        const validacion=validationResult(req);
+        if(!validacion.isEmpty()){
+            res.status(400).send({errors:validacion.array()});
+            return;
         }
-        const [result] = await db.execute(
-            "INSERT INTO destinos (valor, destino) VALUES (?, ?)",
+        const destino = req.body.destino;
+        const [rows]= await db.execute(
+            'INSERT INTO ventacolectivos.destinos (valor, Destino) VALUES (?,?)',
             [destino.valor, destino.destino]
         );
-        const nuevoDestino = {
-            id: result.insertId,
-            valor: destino.valor,
-            destino: destino.destino
-        };
-        res.status(201).send(nuevoDestino);
-    })
+        res.status(201).send({valor:destino.valor, destino:destino.destino, id: rows.insertId});
+        })
+    
+
+
+        
 
     .delete("/:nombre", async (req, res) => {
         const nombre = req.params.nombre;
@@ -56,7 +61,8 @@ destinosRouter.get("/", async (req, res) => {
         const nuevoDestino = req.body;
 
         const [result] = await db.execute(
-            "UPDATE destinos SET valor = :valor WHERE destino = :nombre",
+            "UPDATE ventacolectivos.destinos SET valor = :valor WHERE destino = :nombre",
+            
             { valor: nuevoDestino.valor, nombre }
         );
 
