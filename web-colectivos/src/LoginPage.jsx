@@ -1,3 +1,13 @@
 export const LoginPage = () => {
-  return <p>Pagina Del Login</p>;
+  return (
+    <>
+      <form>
+        <label htmlFor="usuario">Usuario:</label>
+        <input name="usuario" type="text" />
+        <label htmlFor="password">Contraseña:</label>
+        <input name="password" type="password" />
+        <button type="submit">Ingresar</button>
+      </form>
+    </>
+  );
 };
