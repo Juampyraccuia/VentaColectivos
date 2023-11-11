@@ -5,6 +5,7 @@ import { LoginPage } from "./Pages/LoginPage";
 import { Pasajeros } from "./Pages/Pasajeros";
 import { Boleto } from "./Pages/Boleto";
 import { Vendedores } from "./Pages/Vendedores";
+import { RequiredAuth } from "./context/RequireAuth";
 
 function App() {
   return (
@@ -15,9 +16,30 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />
-          <Route path="/pasajeros" element={<Pasajeros />} />
-          <Route path="/boleto" element={<Boleto />} />
-          <Route path="/vendedores" element={<Vendedores />} />
+          <Route
+            path="/pasajeros"
+            element={
+              <RequiredAuth>
+                <Pasajeros />
+              </RequiredAuth>
+            }
+          />
+          <Route
+            path="/boleto"
+            element={
+              <RequiredAuth>
+                <Boleto />
+              </RequiredAuth>
+            }
+          />
+          <Route
+            path="/vendedores"
+            element={
+              <RequiredAuth>
+                <Vendedores />
+              </RequiredAuth>
+            }
+          />
           <Route path="/login" element={<LoginPage />} />
         </Route>
       </Routes>
