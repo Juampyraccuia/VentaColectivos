@@ -24,7 +24,7 @@ destinosRouter.get("/", async (req, res) => {
 
     .post("/", 
     body("destino.valor").isNumeric().isLength({min:1, max:8}),
-    body("destino.destino").isAlpha().isLength({min:1, max:45}),
+    body("destino.destino").matches(/^[\p{L}\s]+$/u).isLength({min:1, max:45}),
     async(req,res)=>{
         const validacion=validationResult(req);
         if(!validacion.isEmpty()){
