@@ -1,6 +1,8 @@
 import express from "express";
 import { db } from "./db.js";
+import bcrypt from "bcryptjs";
 import { body, validationResult } from "express-validator";
+
 export const vendedorRouter = express.Router();
 
 vendedorRouter.get("/", async (req, res) => {
@@ -28,6 +30,35 @@ vendedorRouter.get("/", async (req, res) => {
     );
     res.send(rows);
   })
+
+
+//   .post(
+//     "/", 
+//     body,("usuario").isAlpha(),
+//     body("password").isStrongPassword({
+//       minLength:8,
+//       minLowercase:1,
+//       minUppercase:1,
+//       minNumbers:1,
+//       minSymbols:0
+//     }),
+//     body("idVendedor").isInt({min:1}),
+//     async (req,res)=>{;
+//       const validacion=validationResult(req);
+//       if(!validacion.isEmpty()) {
+//       res.status(400).send({errores:validacion.array()});
+//       return
+//     }
+//     const {usuario,password,idVendedor}=req.body;
+//     const passwordHashed=await bcrypt.hash(password, 8);
+//     const rows= await db.execute(
+//       "INSERT INTO ventacolectivos.vendedores(usuario, password, persona_id) VALUES (:usuario, :password, :idVendedor)",
+//       {usuario,password:passwordHashed,idVendedor}
+//     )
+//     res.status(201).send({id:rows.insertId,usuario,idVendedor})
+//   }
+// ) 
+
 
   .post("/",
   body("vendedor.nombre").isAlpha().isLength({min:1, max:45}),
