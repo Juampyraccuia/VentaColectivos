@@ -1,5 +1,6 @@
 import express from "express";
 import { db } from "./db.js";
+
 export const ventasRouter = express.Router();
 
 ventasRouter.get("/", async (req, res) => {

@@ -8,14 +8,14 @@ export const pasajeroRouter = express.Router();
 
 
 pasajeroRouter.get("/", async (req, res) => {
-  const [rows, fields] = await db.execute("SELECT * FROM ventacolectivos.pasajero");
+  const [rows, fields] = await db.execute("SELECT * FROM ventacolectivos.pasajeros");
   res.send(rows);
 })
 
   .get("/:dni", async (req, res) => {
     const dni = req.params.dni;
     const [rows, fields] = await db.execute(
-      "SELECT  nombres, apellido, dni FROM pasajero WHERE dni = :dni",
+      "SELECT  nombres, apellido, dni FROM pasajeros WHERE dni = :dni",
       { dni }
     );
     if (rows.length > 0) {
