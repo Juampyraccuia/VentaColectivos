@@ -65,7 +65,7 @@ export const authRouter=express
         //crear token
         const payload= {usuario};
         const token = jwt.sign(payload, process.env.SECRET_TOKEN, {
-            expiresIn:"3h",
+            expiresIn:"12h",
     });
 
     const sesion = {
