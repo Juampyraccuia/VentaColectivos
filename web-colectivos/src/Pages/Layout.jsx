@@ -1,8 +1,10 @@
 import { Link, Outlet } from "react-router-dom";
+import { AuthStatus } from "../context/AuthStatus";
 
 export const Layout = () => {
   return (
     <>
+      <AuthStatus />
       <nav>
         <ul>
           <li>
