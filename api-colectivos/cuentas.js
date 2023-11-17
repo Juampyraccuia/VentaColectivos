@@ -6,10 +6,13 @@ import { body, param, validationResult } from "express-validator";
 
 export const cuentasRouter = express
   .Router()
-
+  .get("/", async (req, res) => {
+    const [rows, fields] = await db.execute("SELECT * FROM ventacolectivos.cuentas");
+    res.send(rows);
+})
   .post(
     "/",
-    body("usuario").isAlphanumeric().isLength({ min: 1, max: 25 }),
+    body("usuario").isAlpha().isLength({ min: 1, max: 25 }),
     body("password").isStrongPassword({
       minLength: 8,
       minLowercase: 1,
@@ -18,16 +21,17 @@ export const cuentasRouter = express
       minSymbols: 0,
     }),
     body("idVendedor").isInt({min:1}),
+    body("rol").isAlpha().isLength({min:1 , max:20}),
     async(req,res)=>{
         const validacion= validationResult(req);
         if (!validacion.isEmpty()) {
             res.status(400).send({errors: validacion.array()});
             return
-    }const {usuario,password , idVendedor}=req.body;
+    }const {usuario,password , idVendedor,rol}=req.body;
     const passwordHashed= await bcrypt.hash(password,8)
     const [rows]=await db.execute(
-        "INSERT INTO cuentas (usuario, password, idVendedo)VALUES (:usuariom ,:password,:idVendedor)",
-        { usuario, password: passwordHashed, idVendedor }
+        "INSERT INTO cuentas (usuario, password, idVendedor,rol)VALUES (:usuario ,:password,:idVendedor, :rol)",
+        { usuario, password: passwordHashed, idVendedor, rol }
     );
     res.status(201).send({id:rows.insertId, usuario, idVendedor});
     })
