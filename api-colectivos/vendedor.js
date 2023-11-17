@@ -1,10 +1,13 @@
 import express from "express";
 import { db } from "./db.js";
+import bcrypt from "bcryptjs";
+import { body, validationResult } from "express-validator";
+
 export const vendedorRouter = express.Router();
 
 vendedorRouter.get("/", async (req, res) => {
   const [rows, fields] = await db.execute(
-    "SELECT idvendedor, nombre, apellido FROM ventacolectivos.vendedor"
+    "SELECT * FROM ventacolectivos.vendedor"
   );
   res.send(rows);
 })
@@ -28,17 +31,24 @@ vendedorRouter.get("/", async (req, res) => {
     res.send(rows);
   })
 
-  .post("/", async (req, res) => {
-    const vendedor = req.body;
-    const nombre = vendedor.nombre || null;
-    const apellido = vendedor.apellido || null;
 
-    const [result] = await db.execute(
+
+  .post("/",
+  body("vendedor.nombre").isAlpha().isLength({min:1, max:45}),
+  body("vendedor.apellido").isAlpha().isLength({min:1 , max:45}),
+   async (req, res) => {
+    const validacion=validationResult(req);
+    if (!validacion.isEmpty()) {
+      res.status(400).send({errors:validacion.array()});
+      return;
+    }
+    const vendedor = req.body.vendedor;
+    const [rows] = await db.execute(
       "INSERT INTO ventacolectivos.vendedor (nombre, apellido) VALUES (?, ?)",
-      [nombre, apellido]
+      [vendedor.nombre, vendedor.apellido]
     );
 
-    res.status(201).send({ nombre, apellido, idvendedor: result.insertId });
+    res.status(201).send({ nombre:vendedor.nombre, apellido: vendedor.apellido, idvendedor: rows.insertId });
   })
 
 
