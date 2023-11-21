@@ -8,6 +8,7 @@ import { destinosRouter } from "./destinos.js";
 import { ventasRouter } from "./ventas.js";
 import { boletosRouter } from "./boletos.js";
 import { colectivosRouter } from "./colectivos.js";
+import { cuentasRouter } from "./cuentas.js"
 import { authConfig, authRouter } from "./auth.js";
 
 const app = express();
@@ -23,6 +24,7 @@ app.use("/ventas", ventasRouter)
 app.use("/boletos", boletosRouter)
 app.use("/colectivos", colectivosRouter)
 app.use("/auth", authRouter)
+app.use("/cuentas", cuentasRouter)
 
 
 app.get('/', (req, res) => {

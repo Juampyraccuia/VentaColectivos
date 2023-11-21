@@ -6,7 +6,7 @@ export const ventasRouter = express.Router();
 
 // Obtener todas las ventas
 ventasRouter.get("/", async (req, res) => {
-  const [rows, fields] = await db.execute("SELECT * FROM colectivos.ventas");
+  const [rows, fields] = await db.execute("SELECT * FROM ventas");
   res.send(rows);
 });
 
@@ -14,7 +14,7 @@ ventasRouter.get("/", async (req, res) => {
 ventasRouter.get("/:id", async (req, res) => {
   const id = req.params.id;
   const [rows, fields] = await db.execute(
-    "SELECT * FROM colectivos.ventas WHERE idventa = ?",
+    "SELECT * FROM ventas WHERE idventa = ?",
     [id]
   );
   if (rows.length > 0) {
@@ -39,7 +39,7 @@ ventasRouter.post(
     const { idvendedor, idboleto, fecha } = req.body;
 
     await db.execute(
-      "INSERT INTO colectivos.ventas (idvendedor, idboleto, fecha) VALUES (?, ?, ?)",
+      "INSERT INTO ventas (idvendedor, idboleto, fecha) VALUES (?, ?, ?)",
       [idvendedor, idboleto, fecha]
     );
     res.status(201).send("La venta ha sido creada correctamente.");
@@ -52,7 +52,7 @@ ventasRouter.put("/:id", async (req, res) => {
   const { idvendedor, idboleto, fecha } = req.body;
 
   await db.execute(
-    "UPDATE colectivos.ventas SET idvendedor = ?, idboleto = ?, fecha = ? WHERE idventa = ?",
+    "UPDATE ventas SET idvendedor = ?, idboleto = ?, fecha = ? WHERE idventa = ?",
     [idvendedor, idboleto, fecha, id]
   );
   res.status(200).send("La venta ha sido actualizada correctamente.");
@@ -61,6 +61,6 @@ ventasRouter.put("/:id", async (req, res) => {
 // Eliminar una venta por ID
 ventasRouter.delete("/:id", async (req, res) => {
   const id = req.params.id;
-  await db.execute("DELETE FROM colectivos.ventas WHERE idventa = ?", [id]);
+  await db.execute("DELETE FROM ventas WHERE idventa = ?", [id]);
   res.status(200).send("La venta ha sido eliminada correctamente.");
 });

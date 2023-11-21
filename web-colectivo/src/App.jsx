@@ -6,16 +6,17 @@ import { LoginPage } from "./pages/LoginPage";
 import { Boleto } from "./pages/Boleto";
 import { RequiredAuth } from "./context/RequireAuth";
 import { VendedorPage } from "./pages/VendedorPage";
+import { PasajeroPage } from "./pages/pasajeroPage";
 import { SinRuta } from "./pages/SinRuta";
 
 function App() {
   return (
     <>
-      <h1>Aplicacion</h1>
+      <h1>Sistema de venta para boletos de colectivos de larga distancia </h1>
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />
-          <Route path="/acerca-de/:id" element={<AboutPage />} />
+          <Route path="/acerca-de" element={<AboutPage />} />
           <Route
             path="/boleto"
             element={
@@ -24,7 +25,22 @@ function App() {
               </RequiredAuth>
             }
           />
-          <Route path="/vendedor" element={<VendedorPage />} />
+          <Route
+            path="/vendedor"
+            element={
+              <RequiredAuth>
+                <VendedorPage />
+              </RequiredAuth>
+            }
+          />
+          <Route
+            path="/pasajero"
+            element={
+              <RequiredAuth>
+                <PasajeroPage />
+              </RequiredAuth>
+            }
+          />
           <Route path="/login" element={<LoginPage />} />
           <Route path="*" element={<SinRuta />} />
         </Route>

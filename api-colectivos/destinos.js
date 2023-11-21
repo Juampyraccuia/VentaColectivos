@@ -1,3 +1,5 @@
+// destinos.js
+
 import express from "express";
 import { db } from "./db.js";
 import { body, validationResult } from "express-validator";
@@ -6,7 +8,7 @@ export const destinosRouter = express.Router();
 
 // Obtener todos los destinos
 destinosRouter.get("/", async (req, res) => {
-  const [rows, fields] = await db.execute("SELECT * FROM colectivos.destinos");
+  const [rows, fields] = await db.execute("SELECT * FROM destinos");
   res.send(rows);
 });
 
@@ -14,7 +16,7 @@ destinosRouter.get("/", async (req, res) => {
 destinosRouter.get("/:id", async (req, res) => {
   const id = req.params.id;
   const [rows, fields] = await db.execute(
-    "SELECT * FROM colectivos.destinos WHERE iddestino = ?",
+    "SELECT * FROM destinos WHERE iddestino = ?",
     [id]
   );
   if (rows.length > 0) {
@@ -38,7 +40,7 @@ destinosRouter.post(
     const { nombre, precio } = req.body;
 
     await db.execute(
-      "INSERT INTO colectivos.destinos (nombre, precio) VALUES (?, ?)",
+      "INSERT INTO destinos (nombre, precio) VALUES (?, ?)",
       [nombre, precio]
     );
     res.status(201).send("El destino ha sido creado correctamente.");
@@ -51,7 +53,7 @@ destinosRouter.put("/:id", async (req, res) => {
   const { nombre, precio } = req.body;
 
   await db.execute(
-    "UPDATE colectivos.destinos SET nombre = ?, precio = ? WHERE iddestino = ?",
+    "UPDATE destinos SET nombre = ?, precio = ? WHERE iddestino = ?",
     [nombre, precio, id]
   );
   res.status(200).send("El destino ha sido actualizado correctamente.");
@@ -60,6 +62,12 @@ destinosRouter.put("/:id", async (req, res) => {
 // Eliminar un destino por ID
 destinosRouter.delete("/:id", async (req, res) => {
   const id = req.params.id;
-  await db.execute("DELETE FROM colectivos.destinos WHERE iddestino = ?", [id]);
+  await db.execute("DELETE FROM destinos WHERE iddestino = ?", [id]);
   res.status(200).send("El destino ha sido eliminado correctamente.");
+});
+
+// Obtener precios y destinos
+destinosRouter.get("/preciodestino", async (req, res) => {
+  const [rows, fields] = await db.execute("SELECT precio,nombre FROM destinos");
+  res.send(rows);
 });

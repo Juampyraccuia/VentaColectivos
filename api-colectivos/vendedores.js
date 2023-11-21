@@ -6,7 +6,7 @@ export const vendedoresRouter = express.Router();
 
 // Obtener todos los vendedores
 vendedoresRouter.get("/", async (req, res) => {
-  const [rows, fields] = await db.execute("SELECT * FROM colectivos.vendedores");
+  const [rows, fields] = await db.execute("SELECT * FROM vendedores");
   res.send(rows);
 });
 
@@ -14,7 +14,7 @@ vendedoresRouter.get("/", async (req, res) => {
 vendedoresRouter.get("/:id", async (req, res) => {
   const id = req.params.id;
   const [rows, fields] = await db.execute(
-    "SELECT * FROM colectivos.vendedores WHERE idvendedor = ?",
+    "SELECT * FROM vendedores WHERE idvendedor = ?",
     [id]
   );
   if (rows.length > 0) {
@@ -39,8 +39,8 @@ vendedoresRouter.post(
     const { idvendedor, nombre, apellido } = req.body;
 
     await db.execute(
-      "INSERT INTO colectivos.vendedores (idvendedor , nombre, apellido) VALUES (?, ?,?)",
-      [idvendedor,nombre, apellido]
+      "INSERT INTO vendedores (idvendedor , nombre, apellido) VALUES (?, ?,?)",
+      [idvendedor, nombre, apellido]
     );
     res.status(201).send("El vendedor ha sido creado correctamente.");
   }
@@ -52,7 +52,7 @@ vendedoresRouter.put("/:id", async (req, res) => {
   const { nombre, apellido } = req.body;
 
   await db.execute(
-    "UPDATE colectivos.vendedores SET nombre = ?, apellido = ? WHERE idvendedor = ?",
+    "UPDATE vendedores SET nombre = ?, apellido = ? WHERE idvendedor = ?",
     [nombre, apellido, id]
   );
   res.status(200).send("El vendedor ha sido actualizado correctamente.");
@@ -61,6 +61,6 @@ vendedoresRouter.put("/:id", async (req, res) => {
 // Eliminar un vendedor por ID
 vendedoresRouter.delete("/:id", async (req, res) => {
   const id = req.params.id;
-  await db.execute("DELETE FROM colectivos.vendedores WHERE idvendedor = ?", [id]);
+  await db.execute("DELETE FROM vendedores WHERE idvendedor = ?", [id]);
   res.status(200).send("El vendedor ha sido eliminado correctamente.");
 });
