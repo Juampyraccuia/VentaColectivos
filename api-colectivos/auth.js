@@ -15,7 +15,7 @@ export function authConfig() {
   passport.use(
     new Strategy(jwtOptions, async (payload, next) => {
       const [rows, fields] = await db.execute(
-        "SELECT usuario FROM cuentas WHERE usuario = :usuario",
+        "SELECT usuario, rol FROM cuentas WHERE usuario = :usuario",
         { usuario: payload.usuario }
       );
       if (rows.length > 0) {
@@ -54,12 +54,8 @@ export const authRouter = express
         `SELECT
            c.usuario,
            c.password,
-           v.idvendedor as id,
-           v.nombre,
-           v.apellido,
-           v.rol
+           c.rol
          FROM cuentas c
-         JOIN vendedores v ON c.idvendedor = v.idvendedor
          WHERE usuario = :usuario`,
         { usuario }
       );
@@ -87,9 +83,6 @@ export const authRouter = express
       // Sesión en WEB
       const sesion = {
         usuario: user.usuario,
-        id: user.id,
-        nombre: user.nombre,
-        apellido: user.apellido,
         rol: user.rol,
         token,
       };

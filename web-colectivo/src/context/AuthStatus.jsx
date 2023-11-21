@@ -6,6 +6,7 @@ export const AuthStatus = () => {
   const navigate = useNavigate();
 
   if (!sesion) {
+    
     return <p>No esta conectado</p>;
   }
 
