@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useAuthContext } from "../context/AuthContext";
 import axios from "axios";
+import Button from 'react-bootstrap/Button';
 
 export const Boleto = () => {
   const { sesion } = useAuthContext();
@@ -11,6 +12,9 @@ export const Boleto = () => {
   });
 
   const [destinos, setDestinos] = useState([]);
+  const [asientos, setAsientos] = useState([]);
+  const [asientosSeleccionados, setAsientosSeleccionados] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     // Obtener la lista de destinos desde el servidor
@@ -22,17 +26,35 @@ export const Boleto = () => {
         console.error("Error al obtener destinos:", error);
       }
     };
+
     fetchDestinos();
+  }, []);
+
+  useEffect(() => {
+    const obtenerAsientos = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/asientos");
+        setAsientos(response.data);
+        setError(null);
+      } catch (error) {
+        console.error("Error al obtener los asientos:", error);
+        setError("Error al obtener los asientos. Inténtalo de nuevo más tarde.");
+      }
+    };
+
+    obtenerAsientos();
   }, []);
 
   const handleComprarBoleto = async () => {
     try {
+      // Realizar la compra del boleto utilizando asientosSeleccionados
       const response = await axios.post(
         "http://localhost:3000/boletos",
         {
           idcolectivo: nuevoBoleto.idColectivo,
           precio: nuevoBoleto.precio,
           destino: nuevoBoleto.destino,
+          asientos: asientosSeleccionados,
         },
         {
           headers: { Authorization: `Bearer ${sesion.token}` },
@@ -42,8 +64,23 @@ export const Boleto = () => {
       console.log("Boleto comprado:", response.data);
       // Limpiar el formulario después de comprar el boleto
       setNuevoBoleto({ idColectivo: "", precio: "", destino: "" });
+      // Limpiar asientos seleccionados
+      setAsientosSeleccionados([]);
     } catch (error) {
       console.error("Error al comprar boleto:", error);
+    }
+  };
+
+  const handleSeleccionarAsiento = (idAsiento) => {
+    // Verificar si el asiento ya está seleccionado
+    const isSelected = asientosSeleccionados.includes(idAsiento);
+
+    if (isSelected) {
+      // Si está seleccionado, quitarlo de la lista
+      setAsientosSeleccionados(asientosSeleccionados.filter((id) => id !== idAsiento));
+    } else {
+      // Si no está seleccionado, agregarlo a la lista
+      setAsientosSeleccionados([...asientosSeleccionados, idAsiento]);
     }
   };
 
@@ -91,7 +128,24 @@ export const Boleto = () => {
           ))}
         </select>
       </label>
-      <button onClick={handleComprarBoleto}>Comprar Boleto</button>
+      <button variant="primary" onClick={handleComprarBoleto}>Comprar Boleto</button>
+
+      <h2>Asientos Disponibles</h2>
+      <div className="fila-asientos">
+        {asientos.map((asiento) => (
+          <div
+            key={asiento.id}
+            className={`asiento ${asiento.estado === "ocupado" ? "ocupado" : "libre"}`}
+            onClick={() => handleSeleccionarAsiento(asiento.id)}
+          >
+            {asiento.numero}
+          </div>
+        ))}
+      </div>
+
+      <h2>Asientos Seleccionados</h2>
+      <p>{asientosSeleccionados.join(", ")}</p>
     </>
   );
 };
+

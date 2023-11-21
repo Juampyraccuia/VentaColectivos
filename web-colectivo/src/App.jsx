@@ -9,6 +9,7 @@ import { VendedorPage } from "./pages/VendedorPage";
 import { PasajeroPage } from "./pages/pasajeroPage";
 import { SinRuta } from "./pages/SinRuta";
 
+
 function App() {
   return (
     <>
@@ -41,6 +42,7 @@ function App() {
               </RequiredAuth>
             }
           />
+          
           <Route path="/login" element={<LoginPage />} />
           <Route path="*" element={<SinRuta />} />
         </Route>
