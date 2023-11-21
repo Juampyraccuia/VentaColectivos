@@ -32,6 +32,9 @@ export const Layout = () => {
               <li>
                 <Link to="/pasajero">Nuevo cliente</Link>
               </li>
+              <li>
+                <Link to="/asientos">asientos</Link>
+              </li>
               
             </>
           )}
