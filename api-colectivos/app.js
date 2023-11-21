@@ -1,5 +1,5 @@
 import "dotenv/config";
-import  express  from "express";
+import express from "express";
 import cors from "cors"
 import { asientosRouter } from "./asientos.js";
 import { vendedoresRouter } from "./vendedores.js";
@@ -16,17 +16,18 @@ app.use(cors());
 authConfig()
 
 app.use("/asientos", asientosRouter);
-app.use("/vendedores",vendedoresRouter);
-app.use("/pasajeros",pasajerosRouter)
-app.use("/destinos",destinosRouter)
-app.use("/ventas",ventasRouter)
-app.use("/boletos",boletosRouter)
+app.use("/vendedores", vendedoresRouter);
+app.use("/pasajeros", pasajerosRouter)
+app.use("/destinos", destinosRouter)
+app.use("/ventas", ventasRouter)
+app.use("/boletos", boletosRouter)
 app.use("/colectivos", colectivosRouter)
+app.use("/auth", authRouter)
 
 
-app.get('/', (req,res)=>{
+app.get('/', (req, res) => {
     res.send('hola soy una api')
 })
-app.listen(3000,()=>{
+app.listen(3000, () => {
     console.log('API en funcionamiento');
 })
