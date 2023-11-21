@@ -18,12 +18,10 @@ export const Layout = () => {
               <li>
                 <Link to="/login">Login</Link>
               </li>
-              
             </>
           )}
           {sesion && (
             <>
-
               <li>
                 <Link to="/boleto">Compra de boletos</Link>
               </li>
@@ -36,13 +34,8 @@ export const Layout = () => {
               <li>
                 <Link to="/pasajero">Nuevo cliente</Link>
               </li>
-              <li>
-                <Link to="/asientos">asientos</Link>
-              </li>
-              
             </>
           )}
-
         </ul>
       </nav>
       <Outlet />
