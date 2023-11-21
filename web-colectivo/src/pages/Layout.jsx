@@ -23,6 +23,10 @@ export const Layout = () => {
           )}
           {sesion && (
             <>
+
+              <li>
+                <Link to="/boleto">Compra de boletos</Link>
+              </li>
               <li>
                 <Link to={`/acerca-de`}>Acerca de...</Link>
               </li>
