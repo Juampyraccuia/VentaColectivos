@@ -41,8 +41,7 @@ asientosRouter.get("/:id/detalle", async (req, res) => {
   }
 });
 
-// Crear un nuevo asiento
-// Crear un nuevo asiento
+
 asientosRouter.post(
   "/",
   body("asiento.numero").isNumeric().isLength({ min: 1, max: 2 }),
@@ -57,7 +56,7 @@ asientosRouter.post(
     const { numero, estado, idcolectivo } = req.body.asiento;
 
     const [rows] = await db.execute(
-      "SELECT * FROM asientos WHERE numero = ? AND estado = 'reservado'",
+      "SELECT * FROM asientos WHERE numero = ?",
       [numero]
     );
     if (rows.length > 0) {
@@ -76,13 +75,32 @@ asientosRouter.post(
 // Actualizar un asiento por ID
 asientosRouter.put("/:id", async (req, res) => {
   const id = req.params.id;
-  const { numero, estado } = req.body;
+  const { estado } = req.body;
 
-  await db.execute(
-    "UPDATE asientos SET numero = ?, estado = ? WHERE idasiento = ?",
-    [numero, estado, id]
+  // Validar el nuevo estado
+  if (estado !== "reservado") {
+    res.status(400).send("El nuevo estado debe ser 'reservado'.");
+    return;
+  }
+
+  // Verificar si el asiento está ocupado
+  const [rows] = await db.execute(
+    "SELECT * FROM asientos WHERE idasiento = ? AND estado = 'reservado'",
+    [id]
   );
-  res.status(200).send("El asiento ha sido actualizado correctamente.");
+
+  if (rows.length > 0) {
+    res.status(409).send("El asiento está ocupado.");
+    return;
+  }
+
+  // Actualizar el estado del asiento a "reservado"
+  await db.execute(
+    "UPDATE asientos SET estado = 'reservado' WHERE idasiento = ?",
+    [id]
+  );
+
+  res.status(200).send("El asiento ha sido reservado correctamente.");
 });
 
 // Eliminar un asiento por ID
