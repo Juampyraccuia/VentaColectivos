@@ -26,15 +26,24 @@ export const LoginPage = () => {
   };
 
   return (
-    <>
-      <form onSubmit={onSubmit}>
-        <label htmlFor="usuario">Usuario:</label>
-        <input name="usuario" type="text" />
-        <label htmlFor="password">Contraseña:</label>
-        <input name="password" type="password" />
-        <button type="submit">Ingresar</button>
-      </form>
-      {error && <p>Usuario o contraseña inválido</p>}
-    </>
+    <div className="container">
+      <Form onSubmit={onSubmit}>
+        <h2 className="mb-4">Iniciar sesión</h2>
+        <Form.Group className="mb-3">
+          <Form.Label>Usuario</Form.Label>
+          <Form.Control name="usuario" type="text" placeholder="Ingrese su usuario" />
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Label>Contraseña</Form.Label>
+          <Form.Control name="password" type="password" placeholder="Ingrese su contraseña" />
+        </Form.Group>
+        <Button variant="warning" type="submit">
+          Ingresar
+        </Button>
+      </Form>
+      {error && (
+        <p className="text-danger mt-3">Usuario o contraseña inválido</p>
+      )}
+    </div>
   );
 };

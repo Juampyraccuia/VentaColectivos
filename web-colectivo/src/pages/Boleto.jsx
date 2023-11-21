@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useAuthContext } from "../context/AuthContext";
 import axios from "axios";
+import Button from 'react-bootstrap/Button';
 
 export const Boleto = () => {
   const { sesion } = useAuthContext();
@@ -127,7 +128,7 @@ export const Boleto = () => {
           ))}
         </select>
       </label>
-      <button onClick={handleComprarBoleto}>Comprar Boleto</button>
+      <button variant="primary" onClick={handleComprarBoleto}>Comprar Boleto</button>
 
       <h2>Asientos Disponibles</h2>
       <div className="fila-asientos">
