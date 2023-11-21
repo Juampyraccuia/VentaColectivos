@@ -6,7 +6,7 @@ export const colectivosRouter = express.Router();
 
 // Obtener todos los colectivos
 colectivosRouter.get("/", async (req, res) => {
-  const [rows, fields] = await db.execute("SELECT * FROM colectivos.colectivos");
+  const [rows, fields] = await db.execute("SELECT * FROM colectivos");
   res.send(rows);
 });
 
@@ -14,7 +14,7 @@ colectivosRouter.get("/", async (req, res) => {
 colectivosRouter.get("/:id", async (req, res) => {
   const id = req.params.id;
   const [rows, fields] = await db.execute(
-    "SELECT * FROM colectivos.colectivos WHERE idcolectivo = ?",
+    "SELECT * FROM colectivos WHERE idcolectivo = ?",
     [id]
   );
   if (rows.length > 0) {
@@ -37,7 +37,7 @@ colectivosRouter.post(
     const { nombre } = req.body;
 
     await db.execute(
-      "INSERT INTO colectivos.colectivos (nombre) VALUES (?)",
+      "INSERT INTO colectivos (nombre) VALUES (?)",
       [nombre]
     );
     res.status(201).send("El colectivo ha sido creado correctamente.");
@@ -50,7 +50,7 @@ colectivosRouter.put("/:id", async (req, res) => {
   const { nombre } = req.body;
 
   await db.execute(
-    "UPDATE colectivos.colectivos SET nombre = ? WHERE idcolectivo = ?",
+    "UPDATE colectivos SET nombre = ? WHERE idcolectivo = ?",
     [nombre, id]
   );
   res.status(200).send("El colectivo ha sido actualizado correctamente.");
@@ -59,6 +59,6 @@ colectivosRouter.put("/:id", async (req, res) => {
 // Eliminar un colectivo por ID
 colectivosRouter.delete("/:id", async (req, res) => {
   const id = req.params.id;
-  await db.execute("DELETE FROM colectivos.colectivos WHERE idcolectivo = ?", [id]);
+  await db.execute("DELETE FROM colectivos WHERE idcolectivo = ?", [id]);
   res.status(200).send("El colectivo ha sido eliminado correctamente.");
 });

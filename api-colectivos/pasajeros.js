@@ -6,7 +6,7 @@ export const pasajerosRouter = express.Router();
 
 // Obtener todos los pasajeros
 pasajerosRouter.get("/", async (req, res) => {
-  const [rows, fields] = await db.execute("SELECT * FROM colectivos.pasajeros");
+  const [rows, fields] = await db.execute("SELECT * FROM pasajeros");
   res.send(rows);
 });
 
@@ -14,7 +14,7 @@ pasajerosRouter.get("/", async (req, res) => {
 pasajerosRouter.get("/:id", async (req, res) => {
   const id = req.params.id;
   const [rows, fields] = await db.execute(
-    "SELECT * FROM colectivos.pasajeros WHERE idpasajero = ?",
+    "SELECT * FROM pasajeros WHERE idpasajero = ?",
     [id]
   );
   if (rows.length > 0) {
@@ -38,7 +38,7 @@ pasajerosRouter.post(
     const { nombre, apellido } = req.body;
 
     await db.execute(
-      "INSERT INTO colectivos.pasajeros (nombre, apellido) VALUES (?, ?)",
+      "INSERT INTO pasajeros (nombre, apellido) VALUES (?, ?)",
       [nombre, apellido]
     );
     res.status(201).send("El pasajero ha sido creado correctamente.");
@@ -51,7 +51,7 @@ pasajerosRouter.put("/:id", async (req, res) => {
   const { nombre, apellido } = req.body;
 
   await db.execute(
-    "UPDATE colectivos.pasajeros SET nombre = ?, apellido = ? WHERE idpasajero = ?",
+    "UPDATE pasajeros SET nombre = ?, apellido = ? WHERE idpasajero = ?",
     [nombre, apellido, id]
   );
   res.status(200).send("El pasajero ha sido actualizado correctamente.");
@@ -60,6 +60,6 @@ pasajerosRouter.put("/:id", async (req, res) => {
 // Eliminar un pasajero por ID
 pasajerosRouter.delete("/:id", async (req, res) => {
   const id = req.params.id;
-  await db.execute("DELETE FROM colectivos.pasajeros WHERE idpasajero = ?", [id]);
+  await db.execute("DELETE FROM pasajeros WHERE idpasajero = ?", [id]);
   res.status(200).send("El pasajero ha sido eliminado correctamente.");
 });
