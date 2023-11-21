@@ -1,27 +1,24 @@
 {
   "name": "api-colectivos",
   "version": "1.0.0",
-  "description": "api-colectivos",
-  "main": "app.js",
+  "description": "",
   "type": "module",
+  "main": "app.js",
   "scripts": {
     "dev": "nodemon app.js"
   },
+  "keywords": [],
   "author": "",
   "license": "ISC",
-  "devDependencies": {
-    "nodemon": "^3.0.1"
-  },
   "dependencies": {
-    "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "express-validator": "^7.0.1",
-    "jsonwebtoken": "^9.0.2",
-    "mysql": "^2.18.1",
-    "mysql2": "^3.6.2",
+    "mysql2": "^3.6.3",
+    "mysql2-promise": "^0.1.4",
+    "nodemon": "^3.0.1",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.1"
   }
