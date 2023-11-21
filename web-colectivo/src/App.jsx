@@ -8,6 +8,7 @@ import { RequiredAuth } from "./context/RequireAuth";
 import { VendedorPage } from "./pages/VendedorPage";
 import { PasajeroPage } from "./pages/pasajeroPage";
 import { SinRuta } from "./pages/SinRuta";
+import AsientosPage, { asientosPage} from "./pages/asientos"
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
               </RequiredAuth>
             }
           />
+          
           <Route path="/login" element={<LoginPage />} />
           <Route path="*" element={<SinRuta />} />
         </Route>
