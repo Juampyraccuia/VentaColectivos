@@ -6,7 +6,7 @@ export const asientosRouter = express.Router();
 
 // Obtener todos los asientos
 asientosRouter.get("/", async (req, res) => {
-  const [rows, fields] = await db.execute("SELECT * FROM colectivos.asientos");
+  const [rows, fields] = await db.execute("SELECT * FROM asientos");
   res.send(rows);
 });
 
@@ -14,7 +14,7 @@ asientosRouter.get("/", async (req, res) => {
 asientosRouter.get("/:id", async (req, res) => {
   const id = req.params.id;
   const [rows, fields] = await db.execute(
-    "SELECT * FROM colectivos.asientos WHERE idasiento = ?",
+    "SELECT * FROM asientos WHERE idasiento = ?",
     [id]
   );
   if (rows.length > 0) {
@@ -57,7 +57,7 @@ asientosRouter.post(
     const { numero, estado, idcolectivo } = req.body.asiento;
 
     const [rows] = await db.execute(
-      "SELECT * FROM colectivos.asientos WHERE numero = ? AND estado = 'reservado'",
+      "SELECT * FROM asientos WHERE numero = ? AND estado = 'reservado'",
       [numero]
     );
     if (rows.length > 0) {
@@ -66,7 +66,7 @@ asientosRouter.post(
     }
 
     await db.execute(
-      "INSERT INTO colectivos.asientos (numero, estado, idcolectivo) VALUES (?, ?, ?)",
+      "INSERT INTO asientos (numero, estado, idcolectivo) VALUES (?, ?, ?)",
       [numero, estado, idcolectivo]
     );
     res.status(201).send("El asiento ha sido reservado correctamente.");
@@ -79,7 +79,7 @@ asientosRouter.put("/:id", async (req, res) => {
   const { numero, estado } = req.body;
 
   await db.execute(
-    "UPDATE colectivos.asientos SET numero = ?, estado = ? WHERE idasiento = ?",
+    "UPDATE asientos SET numero = ?, estado = ? WHERE idasiento = ?",
     [numero, estado, id]
   );
   res.status(200).send("El asiento ha sido actualizado correctamente.");
@@ -88,6 +88,6 @@ asientosRouter.put("/:id", async (req, res) => {
 // Eliminar un asiento por ID
 asientosRouter.delete("/:id", async (req, res) => {
   const id = req.params.id;
-  await db.execute("DELETE FROM colectivos.asientos WHERE idasiento = ?", [id]);
+  await db.execute("DELETE FROM asientos WHERE idasiento = ?", [id]);
   res.status(200).send("El asiento ha sido eliminado correctamente.");
 });
