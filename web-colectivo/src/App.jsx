@@ -9,11 +9,14 @@ import { VendedorPage } from "./pages/VendedorPage";
 import { PasajeroPage } from "./pages/pasajeroPage";
 import { SinRuta } from "./pages/SinRuta";
 
-
 function App() {
   return (
     <>
-      <h1>Sistema de venta para boletos de colectivos de larga distancia </h1>
+      <h1>
+        <center>
+          Sistema de venta para boletos de colectivos de larga distancia
+        </center>
+      </h1>
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />
@@ -42,7 +45,7 @@ function App() {
               </RequiredAuth>
             }
           />
-          
+
           <Route path="/login" element={<LoginPage />} />
           <Route path="*" element={<SinRuta />} />
         </Route>
