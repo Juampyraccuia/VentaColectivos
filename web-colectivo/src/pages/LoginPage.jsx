@@ -2,6 +2,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useAuthContext } from "../context/AuthContext";
 import { useState } from "react";
 
+
 export const LoginPage = () => {
   const { login } = useAuthContext();
   const navigate = useNavigate();
@@ -32,7 +33,7 @@ export const LoginPage = () => {
         <input name="usuario" type="text" />
         <label htmlFor="password">Contraseña:</label>
         <input name="password" type="password" />
-        <button type="submit">Ingresar</button>
+        <button  className="btn btn-outline btn-accent" type="submit">Ingresar</button>
       </form>
       {error && <p>Usuario o contraseña inválido</p>}
     </>
