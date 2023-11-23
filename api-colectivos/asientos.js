@@ -41,7 +41,7 @@ asientosRouter.get("/:id/detalle", async (req, res) => {
   }
 });
 
-// Crear un nuevo asiento
+
 asientosRouter.post(
   "/",
   body("asiento.numero").isNumeric().isLength({ min: 1, max: 2 }),

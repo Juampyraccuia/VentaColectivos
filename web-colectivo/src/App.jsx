@@ -13,7 +13,7 @@ import "./css/app.css";
 function App() {
   return (
     <>
-      <main>
+ <main>
         <h1>
           <center>
             Sistema de venta para boletos de colectivos de larga distancia{" "}
