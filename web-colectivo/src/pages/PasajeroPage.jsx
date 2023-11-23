@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useAuthContext } from "../context/AuthContext";
 import axios from "axios";
 import { Container, Row, Col, Form, Button, ListGroup } from "react-bootstrap";
+import "../css/pasajero.css";
 
 export const PasajeroPage = () => {
   const { sesion } = useAuthContext();
@@ -187,11 +188,22 @@ export const PasajeroPage = () => {
                 onChange={handleChange}
               />
             </Form.Group>
-            <Button variant="primary" onClick={handleAgregarPasajero}>
+            <br />
+            <Button
+              variant="outline-success"
+              size="lg"
+              onClick={handleAgregarPasajero}
+              id="bnt-agregar"
+            >
               Agregar Pasajero
             </Button>
             {idPasajeroEditando && (
-              <Button variant="primary" onClick={handleConfirmarEdicion}>
+              <Button
+                variant="outline-success"
+                size="lg"
+                onClick={handleConfirmarEdicion}
+                id="bnt-guardar"
+              >
                 Guardar
               </Button>
             )}
@@ -208,10 +220,14 @@ export const PasajeroPage = () => {
               onChange={handleBusquedaChange}
             />
           </Form.Group>
-          <Button variant="primary" onClick={handleBuscarPasajero}>
+          <Button
+            variant="primary"
+            onClick={handleBuscarPasajero}
+            id="bnt-buscar"
+          >
             Buscar
           </Button>
-
+          <br />
           <h2>Listado de Pasajeros</h2>
           <ListGroup>
             {pasajeros.map((pasajero) => (

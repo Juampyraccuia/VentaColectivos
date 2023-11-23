@@ -11,21 +11,18 @@ export const Layout = () => {
   return (
     <>
       <div id="menu">
-        <Navbar bg="info">
+        <Navbar bg="rgb(115, 115, 115)" data-bs-theme="dark">
           <Container>
             <Navbar.Brand href="/">Venta Colectivo</Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Nav className="me-auto">
               {!sesion && (
                 <Nav.Link>
-                  <Link to="/login">Login</Link>
+                  <Link to="/login">Ingresar</Link>
                 </Nav.Link>
               )}
               {sesion && (
                 <>
-                  <Nav.Link>
-                    <Link to="/">Home</Link>
-                  </Nav.Link>
                   <Nav.Link>
                     <Link to="/acerca-de"> Acerca de...</Link>
                   </Nav.Link>

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useAuthContext } from "../context/AuthContext";
 import axios from "axios";
-import { Form, Button, Alert, Row, Col, Modal } from "react-bootstrap";
+import { Form, Button, Row, Col, Modal } from "react-bootstrap";
+import "../css/boleto.css";
 
 export const Boleto = () => {
   const { sesion } = useAuthContext();
@@ -20,6 +21,7 @@ export const Boleto = () => {
   const [mensaje, setMensaje] = useState("");
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [modalTitle, setModalTitle] = useState("Compra Exitosa"); // Nuevo estado para el título del Modal
 
   useEffect(() => {
     const fetchDestinos = async () => {
@@ -100,13 +102,15 @@ export const Boleto = () => {
         setAsientosSeleccionados([]);
       } else {
         setMensaje("El asiento no está libre. Por favor, elija otro.");
+        setModalTitle("Error en Comprar el Boleto"); // Cambiar el título del Modal en caso de error
       }
     } catch (error) {
       console.error("Error al comprar boleto:", error);
       setError("Error al comprar boleto. Inténtalo de nuevo más tarde.");
+      setModalTitle("Error en Comprar el Boleto"); // Cambiar el título del Modal en caso de error
     }
 
-    // Mostrar el Modal después de comprar el boleto
+    // Mostrar el Modal después de comprar el boleto o en caso de error
     setShowModal(true);
   };
 
@@ -123,9 +127,11 @@ export const Boleto = () => {
         setMensaje("");
       } else {
         setMensaje("El asiento está ocupado. Por favor, elija otro.");
+        setModalTitle("Error en Comprar el Boleto"); // Cambiar el título del Modal en caso de error
       }
     } catch (error) {
       setMensaje("El asiento está ocupado. Por favor, elija otro.");
+      setModalTitle("Error en Comprar el Boleto"); // Cambiar el título del Modal en caso de error
     }
   };
 
@@ -139,6 +145,7 @@ export const Boleto = () => {
 
   const closeModal = () => {
     setShowModal(false);
+    setModalTitle("Compra Exitosa"); // Restaurar el título del Modal al valor original
   };
 
   const obtenerNombreColectivo = (idColectivo) => {
@@ -147,98 +154,108 @@ export const Boleto = () => {
   };
 
   return (
-    <Row>
-      <Col>
-        <h2>
-          <center>Comprar Boleto</center>
-        </h2>
-        <Form>
-          <Form.Group controlId="formColectivo">
-            <Form.Label>Colectivo:</Form.Label>
-            <Form.Control
-              as="select"
-              name="idColectivo"
-              value={nuevoBoleto.idColectivo}
-              onChange={handleChange}
+    <div id="boleto">
+      <Row>
+        <Col>
+          <h2>
+            <center>Comprar Boleto</center>
+          </h2>
+          <Form>
+            <Form.Group controlId="formColectivo">
+              <Form.Label>Colectivo:</Form.Label>
+              <Form.Control
+                as="select"
+                name="idColectivo"
+                value={nuevoBoleto.idColectivo}
+                onChange={handleChange}
+              >
+                <option value="">Seleccionar Colectivo</option>
+                {colectivos.map((colectivo) => (
+                  <option
+                    key={colectivo.idcolectivo}
+                    value={colectivo.idcolectivo}
+                  >
+                    {colectivo.nombre}
+                  </option>
+                ))}
+              </Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId="formPrecio">
+              <Form.Label>Precio:</Form.Label>
+              <Form.Control
+                type="text"
+                name="precio"
+                value={nuevoBoleto.precio}
+                onChange={handleChange}
+                placeholder="Precio"
+              />
+            </Form.Group>
+
+            <Form.Group controlId="formDestino">
+              <Form.Label>Destino:</Form.Label>
+              <Form.Control
+                as="select"
+                name="destino"
+                value={nuevoBoleto.destino}
+                onChange={handleChange}
+              >
+                <option value="">Seleccionar Destino</option>
+                {destinos.map((destino) => (
+                  <option key={destino.iddestino} value={destino.nombre}>
+                    {destino.nombre}
+                  </option>
+                ))}
+              </Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId="formAsiento">
+              <Form.Label>Asientos:</Form.Label>
+              <Form.Control
+                as="select"
+                name="asiento"
+                value={nuevoBoleto.asiento}
+                onChange={handleChange}
+              >
+                <option value="">Seleccionar Asiento</option>
+                {asientos.map((asiento) => (
+                  <option key={asiento.idasiento} value={asiento.numero}>
+                    {`Número: ${asiento.numero} - Estado: ${asiento.estado}`}
+                  </option>
+                ))}
+              </Form.Control>
+            </Form.Group>
+            <br />
+            <Button
+              variant="dark"
+              onClick={handleComprarBoleto}
+              className="bnt-compra"
             >
-              <option value="">Seleccionar Colectivo</option>
-              {colectivos.map((colectivo) => (
-                <option
-                  key={colectivo.idcolectivo}
-                  value={colectivo.idcolectivo}
-                >
-                  {colectivo.nombre}
-                </option>
-              ))}
-            </Form.Control>
-          </Form.Group>
-
-          <Form.Group controlId="formPrecio">
-            <Form.Label>Precio:</Form.Label>
-            <Form.Control
-              type="text"
-              name="precio"
-              value={nuevoBoleto.precio}
-              onChange={handleChange}
-            />
-          </Form.Group>
-
-          <Form.Group controlId="formDestino">
-            <Form.Label>Destino:</Form.Label>
-            <Form.Control
-              as="select"
-              name="destino"
-              value={nuevoBoleto.destino}
-              onChange={handleChange}
-            >
-              <option value="">Seleccionar Destino</option>
-              {destinos.map((destino) => (
-                <option key={destino.iddestino} value={destino.nombre}>
-                  {destino.nombre}
-                </option>
-              ))}
-            </Form.Control>
-          </Form.Group>
-
-          <Form.Group controlId="formAsiento">
-            <Form.Label>Asientos:</Form.Label>
-            <Form.Control
-              as="select"
-              name="asiento"
-              value={nuevoBoleto.asiento}
-              onChange={handleChange}
-            >
-              <option value="">Seleccionar Asiento</option>
-              {asientos.map((asiento) => (
-                <option key={asiento.idasiento} value={asiento.numero}>
-                  {`Número: ${asiento.numero} - Estado: ${asiento.estado}`}
-                </option>
-              ))}
-            </Form.Control>
-          </Form.Group>
-
-          <Button variant="primary" onClick={handleComprarBoleto}>
-            Comprar Boleto
-          </Button>
-        </Form>
-      </Col>
-
-      <Col>
-        <Modal show={showModal} onHide={closeModal}>
-          <Modal.Header closeButton>
-            <Modal.Title>Compra Exitosa</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <p>{mensaje}</p>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={closeModal}>
-              Cerrar
+              Comprar Boleto
             </Button>
-          </Modal.Footer>
-        </Modal>
-      </Col>
-    </Row>
+          </Form>
+        </Col>
+
+        <Col>
+          <Modal show={showModal} onHide={closeModal}>
+            <Modal.Header closeButton>
+              <Modal.Title>{modalTitle}</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <p>{mensaje}</p>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button
+                variant="secondary"
+                onClick={closeModal}
+                className="bnt-compra"
+              >
+                Cerrar
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        </Col>
+      </Row>
+    </div>
   );
 };
-
