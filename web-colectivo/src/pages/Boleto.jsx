@@ -13,6 +13,7 @@ export const Boleto = () => {
 
   const [destinos, setDestinos] = useState([]);
   const [asientos, setAsientos] = useState([]);
+  const [colectivos, setColectivos] = useState([]);
   const [asientosSeleccionados, setAsientosSeleccionados] = useState([]);
   const [estadoAsiento, setEstadoAsiento] = useState("");
   const [mensaje, setMensaje] = useState("");
@@ -28,14 +29,10 @@ export const Boleto = () => {
       }
     };
 
-    fetchDestinos();
-  }, []);
-
-  useEffect(() => {
     const obtenerAsientos = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/asientos");
-        setAsientos(response.data);
+        const responseAsientos = await axios.get("http://localhost:3000/asientos");
+        setAsientos(responseAsientos.data);
         setError(null);
       } catch (error) {
         console.error("Error al obtener los asientos:", error);
@@ -45,7 +42,18 @@ export const Boleto = () => {
       }
     };
 
+    const obtenerColectivos = async () => {
+      try {
+        const responseColectivos = await axios.get("http://localhost:3000/colectivos");
+        setColectivos(responseColectivos.data);
+      } catch (error) {
+        console.error("Error al obtener colectivos:", error);
+      }
+    };
+
+    fetchDestinos();
     obtenerAsientos();
+    obtenerColectivos();
   }, []);
 
   const handleComprarBoleto = async () => {
@@ -54,7 +62,7 @@ export const Boleto = () => {
         `http://localhost:3000/asientos/${nuevoBoleto.asiento}/detalle`
       );
       const asientoDetalle = responseAsiento.data;
-
+  
       if (asientoDetalle.estado === "libre") {
         const responseBoleto = await axios.post(
           "http://localhost:3000/boletos",
@@ -68,15 +76,15 @@ export const Boleto = () => {
             headers: { Authorization: `Bearer ${sesion.token}` },
           }
         );
-
+  
         setMensaje(`Boleto comprado: ${responseBoleto.data}`);
-
+  
         // Actualizar el estado del asiento a 'reservado' mediante la solicitud PUT
         await axios.put(
           `http://localhost:3000/asientos/${nuevoBoleto.asiento}`,
           { estado: "reservado" }
         );
-
+  
         setNuevoBoleto({
           idColectivo: "",
           precio: "",
@@ -89,8 +97,10 @@ export const Boleto = () => {
       }
     } catch (error) {
       console.error("Error al comprar boleto:", error);
+      setError("Error al comprar boleto. Inténtalo de nuevo más tarde.");
     }
   };
+  
 
   const handleSeleccionarAsiento = async (idAsiento) => {
     try {
@@ -119,18 +129,29 @@ export const Boleto = () => {
     }));
   };
 
+  const obtenerNombreColectivo = (idColectivo) => {
+    const colectivo = colectivos.find((c) => c.idcolectivo === idColectivo);
+    return colectivo ? colectivo.nombre : "Desconocido";
+  };
+
   return (
     <>
       <h2>Comprar Boleto</h2>
-      <label>
-        ID colectivo:
-        <input
-          type="text"
-          name="idColectivo"
-          value={nuevoBoleto.idColectivo}
-          onChange={handleChange}
-        />
-      </label>
+     < label>
+  Colectivo:
+  <select
+    name="idColectivo"
+    value={nuevoBoleto.idColectivo}
+    onChange={handleChange}
+  >
+    <option value="">Seleccionar Colectivo</option>
+    {colectivos.map((colectivo) => (
+      <option key={colectivo.idcolectivo} value={colectivo.idcolectivo}>
+        {colectivo.nombre}
+      </option>
+    ))}
+  </select>
+</label>
       <label>
         Precio:
         <input
@@ -156,20 +177,20 @@ export const Boleto = () => {
         </select>
       </label>
       <label>
-        Asientos:
-        <select
-          name="asiento"
-          value={nuevoBoleto.asiento}
-          onChange={handleChange}
-        >
-          <option value="">Seleccionar Asiento</option>
-          {asientos.map((asiento) => (
-            <option key={asiento.idasiento} value={asiento.numero}>
-              {asiento.numero}
-            </option>
-          ))}
-        </select>
-      </label>
+  Asientos:
+  <select
+    name="asiento"
+    value={nuevoBoleto.asiento}
+    onChange={handleChange}
+  >
+    <option value="">Seleccionar Asiento</option>
+    {asientos.map((asiento) => (
+      <option key={asiento.idasiento} value={asiento.numero}>
+        {`Número: ${asiento.numero} - Estado: ${asiento.estado}`}
+      </option>
+    ))}
+  </select>
+</label>
       <button variant="primary" onClick={handleComprarBoleto}>
         Comprar Boleto
       </button>
