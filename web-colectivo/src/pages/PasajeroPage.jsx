@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useAuthContext } from "../context/AuthContext";
 import axios from "axios";
+import { Container, Row, Col, Form, Button, ListGroup } from "react-bootstrap";
 
 export const PasajeroPage = () => {
   const { sesion } = useAuthContext();
@@ -163,51 +164,83 @@ export const PasajeroPage = () => {
   };
 
   return (
-    <>
-      <h2>Agregar Pasajero</h2>
-      <label>
-        Nombre:
-        <input
-          type="text"
-          name="nombre"
-          value={nuevoPasajero.nombre}
-          onChange={handleChange}
-        />
-      </label>
-      <label>
-        Apellido:
-        <input
-          type="text"
-          name="apellido"
-          value={nuevoPasajero.apellido}
-          onChange={handleChange}
-        />
-      </label>
-      {idPasajeroEditando && (
-        <button onClick={handleConfirmarEdicion}>Guardar</button>
-      )}
-      <button onClick={handleAgregarPasajero}>Agregar Pasajero</button>
+    <Container>
+      <Row>
+        <Col className="text-center">
+          <h2>Agregar Pasajero</h2>
+          <Form>
+            <Form.Group controlId="formNombre">
+              <Form.Label>Nombre:</Form.Label>
+              <Form.Control
+                type="text"
+                name="nombre"
+                value={nuevoPasajero.nombre}
+                onChange={handleChange}
+              />
+            </Form.Group>
+            <Form.Group controlId="formApellido">
+              <Form.Label>Apellido:</Form.Label>
+              <Form.Control
+                type="text"
+                name="apellido"
+                value={nuevoPasajero.apellido}
+                onChange={handleChange}
+              />
+            </Form.Group>
+            <Button variant="primary" onClick={handleAgregarPasajero}>
+              Agregar Pasajero
+            </Button>
+            {idPasajeroEditando && (
+              <Button variant="primary" onClick={handleConfirmarEdicion}>
+                Guardar
+              </Button>
+            )}
+          </Form>
+        </Col>
 
-      <h2>Buscar, Eliminar y Editar Pasajero</h2>
-      <label>
-        Buscar por nombre completo:
-        <input type="text" value={busqueda} onChange={handleBusquedaChange} />
-      </label>
-      <button onClick={handleBuscarPasajero}>Buscar</button>
+        <Col className="text-center">
+          <h2>Buscar Pasajero</h2>
+          <Form.Group controlId="formBusqueda">
+            <Form.Label>Buscar por nombre completo:</Form.Label>
+            <Form.Control
+              type="text"
+              value={busqueda}
+              onChange={handleBusquedaChange}
+            />
+          </Form.Group>
+          <Button variant="primary" onClick={handleBuscarPasajero}>
+            Buscar
+          </Button>
 
-      <ul>
-        {pasajeros.map((pasajero) => (
-          <li key={pasajero.idpasajero}>
-            {`${pasajero.nombre} ${pasajero.apellido}`}{" "}
-            <button onClick={() => handleEliminarPasajero(pasajero.idpasajero)}>
-              Eliminar
-            </button>
-            <button onClick={() => handleEditarPasajero(pasajero)}>
-              Editar
-            </button>
-          </li>
-        ))}
-      </ul>
-    </>
+          <h2>Listado de Pasajeros</h2>
+          <ListGroup>
+            {pasajeros.map((pasajero) => (
+              <ListGroup.Item key={pasajero.idpasajero}>
+                <Row>
+                  <Col>{`${pasajero.nombre} ${pasajero.apellido}`}</Col>
+                  <Col className="d-flex justify-content-end">
+                    <Button
+                      variant="danger"
+                      onClick={() =>
+                        handleEliminarPasajero(pasajero.idpasajero)
+                      }
+                      className="mr-2"
+                    >
+                      Eliminar
+                    </Button>
+                    <Button
+                      variant="warning"
+                      onClick={() => handleEditarPasajero(pasajero)}
+                    >
+                      Editar
+                    </Button>
+                  </Col>
+                </Row>
+              </ListGroup.Item>
+            ))}
+          </ListGroup>
+        </Col>
+      </Row>
+    </Container>
   );
 };

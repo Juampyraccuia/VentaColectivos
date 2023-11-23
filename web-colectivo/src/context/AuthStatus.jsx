@@ -6,14 +6,13 @@ export const AuthStatus = () => {
   const navigate = useNavigate();
 
   if (!sesion) {
-
     return <p>No esta conectado</p>;
   }
 
   return (
     <>
       <p>Conectado como {sesion.usuario}</p>
-      <button onClick={() => logout(() => navigate("/"))}>Salir</button>
+      {/* <button onClick={() => logout(() => navigate("/"))}>Salir</button> */}
     </>
   );
 };
